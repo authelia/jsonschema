@@ -929,39 +929,41 @@ func (t *Schema) arrayKeywords(tags []string) {
 	for _, tag := range tags {
 		nameValue := strings.SplitN(tag, keywordKeyValueSep, 2)
 
-		if len(nameValue) < 2 {
-			continue
-		}
-
-		name, val := nameValue[0], nameValue[1]
-		switch name {
-		case kwMinItems:
-			if i, err := strconv.Atoi(val); err == nil {
-				t.MinItems = i
+		switch len(nameValue) {
+		case 1:
+			switch nameValue[0] {
+			case kwUniqueItems:
+				t.UniqueItems = true
 			}
-		case kwMaxItems:
-			if i, err := strconv.Atoi(val); err == nil {
-				t.MaxItems = i
-			}
-		case kwUniqueItems:
-			t.UniqueItems = true
-		case kwDefault:
-			defaultValues = append(defaultValues, val)
-		case kwEnum:
-			switch t.Items.Type {
-			case typeString:
-				t.Items.Enum = append(t.Items.Enum, val)
-			case typeInteger:
+		case 2:
+			name, val := nameValue[0], nameValue[1]
+			switch name {
+			case kwMinItems:
 				if i, err := strconv.Atoi(val); err == nil {
-					t.Items.Enum = append(t.Items.Enum, i)
+					t.MinItems = i
 				}
-			case typeNumber:
-				if f, err := strconv.ParseFloat(val, 64); err == nil {
-					t.Items.Enum = append(t.Items.Enum, f)
+			case kwMaxItems:
+				if i, err := strconv.Atoi(val); err == nil {
+					t.MaxItems = i
 				}
+			case kwDefault:
+				defaultValues = append(defaultValues, val)
+			case kwEnum:
+				switch t.Items.Type {
+				case typeString:
+					t.Items.Enum = append(t.Items.Enum, val)
+				case typeInteger:
+					if i, err := strconv.Atoi(val); err == nil {
+						t.Items.Enum = append(t.Items.Enum, i)
+					}
+				case typeNumber:
+					if f, err := strconv.ParseFloat(val, 64); err == nil {
+						t.Items.Enum = append(t.Items.Enum, f)
+					}
+				}
+			case kwFormat:
+				t.Items.Format = val
 			}
-		case kwFormat:
-			t.Items.Format = val
 		}
 	}
 
