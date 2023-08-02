@@ -482,6 +482,7 @@ func prepareCommentReflector(t *testing.T) *Reflector {
 	r := new(Reflector)
 	err := r.AddGoComments("github.com/authelia/jsonschema", "./examples")
 	require.NoError(t, err, "did not expect error while adding comments")
+
 	return r
 }
 
