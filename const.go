@@ -2,6 +2,7 @@ package jsonschema
 
 const (
 	keywordSep         = ","
+	keywordArraySep    = ";"
 	keywordKeyValueSep = "="
 
 	kwDefault          = "default"

@@ -767,7 +767,7 @@ func (t *Schema) genericKeywords(tags []string, parent *Schema, propertyName str
 					t.OneOf = make([]*Schema, 0, 1)
 				}
 				t.Type = ""
-				types := strings.Split(nameValue[1], ";")
+				types := strings.Split(nameValue[1], keywordArraySep)
 				for _, ty := range types {
 					t.OneOf = append(t.OneOf, &Schema{
 						Type: ty,
@@ -778,7 +778,7 @@ func (t *Schema) genericKeywords(tags []string, parent *Schema, propertyName str
 					t.AnyOf = make([]*Schema, 0, 1)
 				}
 				t.Type = ""
-				types := strings.Split(nameValue[1], ";")
+				types := strings.Split(nameValue[1], keywordArraySep)
 				for _, ty := range types {
 					t.AnyOf = append(t.AnyOf, &Schema{
 						Type: ty,
