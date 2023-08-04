@@ -2,15 +2,13 @@ package jsonschema
 
 import (
 	"fmt"
-	"io/fs"
-	gopath "path"
-	"path/filepath"
-	"strings"
-
 	"go/ast"
 	"go/doc"
 	"go/parser"
 	"go/token"
+	"io/fs"
+	"path/filepath"
+	"strings"
 )
 
 // ExtractGoComments will read all the go files contained in the provided path,
@@ -38,7 +36,8 @@ func ExtractGoComments(base, path string, commentMap map[string]string) error {
 			}
 			for _, v := range d {
 				// paths may have multiple packages, like for tests
-				k := gopath.Join(base, path)
+				k := pathJoinModule(base, path)
+
 				dict[k] = append(dict[k], v)
 			}
 		}
