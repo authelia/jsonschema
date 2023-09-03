@@ -35,9 +35,6 @@ const (
 	kwReadOnly  = "readOnly"
 	kwWriteOnly = "writeOnly"
 
-	formatDateTime = "date-time"
-	formatURI      = "uri"
-
 	valueT     = "t"
 	valueTrue  = "true"
 	valueFalse = "false"
@@ -77,4 +74,28 @@ const (
 	// TypeNull represents the null JSON Schema type.
 	// See https://json-schema.org/understanding-json-schema/reference/null.html#null for more information.
 	TypeNull = "null"
+)
+
+// A built-in string format.
+// See https://json-schema.org/understanding-json-schema/reference/string.html#built-in-formats for more information.
+const (
+	FormatStringDateTime                  = "date-time"
+	FormatStringTime                      = "time"
+	FormatStringDate                      = "date"
+	FormatStringDuration                  = "duration"
+	FormatStringEmail                     = "email"
+	FormatStringInternationalizedEmail    = "idn-email"
+	FormatStringHostname                  = "hostname"
+	FormatStringInternationalizedHostname = "idn-hostname"
+	FormatStringIPv4                      = "ipv4"
+	FormatStringIPv6                      = "ipv6"
+	FormatStringUUID                      = "uuid"
+	FormatStringURI                       = "uri"
+	FormatStringURIReference              = "uri-reference"
+	FormatStringURITemplate               = "uri-template"
+	FormatStringIRI                       = "iri"
+	FormatStringIRIReference              = "iri-reference"
+	FormatStringRegex                     = "regex"
+	FormatStringJSONPointer               = "json-pointer"
+	FormatStringRelativeJSONPointer       = "relative-json-pointer"
 )
