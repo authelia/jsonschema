@@ -951,7 +951,19 @@ func (t *Schema) arrayKeywords(tags []string) {
 					t.MaxItems = i
 				}
 			case kwDefault:
-				defaultValues = append(defaultValues, val)
+				switch t.Items.Type {
+				case typeInteger:
+					if i, err := strconv.Atoi(val); err == nil {
+						defaultValues = append(defaultValues, i)
+					}
+				case typeNumber:
+					if f, err := strconv.ParseFloat(val, 64); err == nil {
+						defaultValues = append(defaultValues, f)
+					}
+				default:
+					defaultValues = append(defaultValues, val)
+				}
+
 			case kwEnum:
 				switch t.Items.Type {
 				case typeString:
