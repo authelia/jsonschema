@@ -363,6 +363,7 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 			{Type: TypeString},
 			{Type: TypeInteger},
 		}
+
 		return st
 	}
 
@@ -372,7 +373,8 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	if t == ipType {
 		// TODO differentiate ipv4 and ipv6 RFC section 7.3.4, 7.3.5
 		st.Type = TypeString
-		st.Format = "ipv4"
+		st.Format = FormatStringIPv4
+
 		return st
 	}
 
@@ -482,7 +484,7 @@ func (r *Reflector) reflectSliceOrArray(definitions Definitions, t reflect.Type,
 func (r *Reflector) reflectMap(definitions Definitions, t reflect.Type, st *Schema) {
 	r.addDefinition(definitions, t, st)
 
-	st.Type = "object"
+	st.Type = TypeObject
 	if st.Description == "" {
 		st.Description = r.lookupComment(t, "")
 
@@ -514,11 +516,11 @@ func (r *Reflector) reflectStruct(definitions Definitions, t reflect.Type, s *Sc
 	switch t {
 	case timeType: // date-time RFC section 7.3.1
 		s.Type = TypeString
-		s.Format = formatDateTime
+		s.Format = FormatStringDateTime
 		return
 	case uriType: // uri RFC section 7.3.6
 		s.Type = TypeString
-		s.Format = formatURI
+		s.Format = FormatStringURI
 		return
 	}
 
@@ -1036,7 +1038,13 @@ func (t *Schema) setExtra(key, val string) {
 
 func isStringFormat(format string) bool {
 	switch format {
-	case formatDateTime, "time", "date", "duration", "email", "idn-email", "hostname", "idn-hostname", "ipv4", "ipv6", "uuid", formatURI, "uri-reference", "iri", "iri-reference", "uri-template", "json-pointer", "relative-json-pointer", "regex":
+	case
+		FormatStringDateTime, FormatStringTime, FormatStringDate, FormatStringDuration, FormatStringEmail,
+		FormatStringInternationalizedEmail, FormatStringHostname, FormatStringInternationalizedHostname,
+		FormatStringIPv4, FormatStringIPv6, FormatStringUUID,
+		FormatStringURI, FormatStringURIReference, FormatStringURITemplate,
+		FormatStringIRI, FormatStringIRIReference,
+		FormatStringJSONPointer, FormatStringRelativeJSONPointer, FormatStringRegex:
 		return true
 	default:
 		return false
