@@ -35,14 +35,6 @@ const (
 	kwReadOnly  = "readOnly"
 	kwWriteOnly = "writeOnly"
 
-	typeString  = "string"
-	typeInteger = "integer"
-	typeNumber  = "number"
-	typeBoolean = "boolean"
-	typeArray   = "array"
-	typeObject  = "object"
-	typeNull    = "null"
-
 	formatDateTime = "date-time"
 	formatURI      = "uri"
 
@@ -55,4 +47,34 @@ const (
 	tagJSONSchemaDescription = "jsonschema_description"
 	tagJSONSchemaExtras      = "jsonschema_extras"
 	tagRequired              = "required"
+)
+
+const (
+	// TypeString represents the string JSON Schema type.
+	// See https://json-schema.org/understanding-json-schema/reference/string.html#string for more information.
+	TypeString = "string"
+
+	// TypeNumber represents the numeric JSON Schema type.
+	// See https://json-schema.org/understanding-json-schema/reference/numeric.html#number for more information.
+	TypeNumber = "number"
+
+	// TypeInteger represents the integer JSON Schema type.
+	// See https://json-schema.org/understanding-json-schema/reference/numeric.html#integer for more information.
+	TypeInteger = "integer"
+
+	// TypeObject represents the object JSON Schema type.
+	// See https://json-schema.org/understanding-json-schema/reference/object.html#object for more information.
+	TypeObject = "object"
+
+	// TypeArray represents the object JSON Schema type.
+	// See https://json-schema.org/understanding-json-schema/reference/array.html#array for more information.
+	TypeArray = "array"
+
+	// TypeBoolean represents the boolean JSON Schema type.
+	// See https://json-schema.org/understanding-json-schema/reference/boolean.html#boolean for more information.
+	TypeBoolean = "boolean"
+
+	// TypeNull represents the null JSON Schema type.
+	// See https://json-schema.org/understanding-json-schema/reference/null.html#null for more information.
+	TypeNull = "null"
 )
