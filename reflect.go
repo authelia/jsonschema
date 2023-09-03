@@ -360,8 +360,8 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	// It will unmarshal either.
 	if t.Implements(protoEnumType) {
 		st.OneOf = []*Schema{
-			{Type: typeString},
-			{Type: typeInteger},
+			{Type: TypeString},
+			{Type: TypeInteger},
 		}
 		return st
 	}
@@ -371,7 +371,7 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	// TODO email RFC section 7.3.2, hostname RFC section 7.3.3, uriref RFC section 7.3.7
 	if t == ipType {
 		// TODO differentiate ipv4 and ipv6 RFC section 7.3.4, 7.3.5
-		st.Type = typeString
+		st.Type = TypeString
 		st.Format = "ipv4"
 		return st
 	}
@@ -391,16 +391,16 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		st.Type = typeInteger
+		st.Type = TypeInteger
 
 	case reflect.Float32, reflect.Float64:
-		st.Type = typeNumber
+		st.Type = TypeNumber
 
 	case reflect.Bool:
-		st.Type = typeBoolean
+		st.Type = TypeBoolean
 
 	case reflect.String:
-		st.Type = typeString
+		st.Type = TypeString
 
 	default:
 		panic("unsupported type " + t.String())
@@ -470,11 +470,11 @@ func (r *Reflector) reflectSliceOrArray(definitions Definitions, t reflect.Type,
 		st.MaxItems = st.MinItems
 	}
 	if t.Kind() == reflect.Slice && t.Elem() == byteSliceType.Elem() {
-		st.Type = typeString
+		st.Type = TypeString
 		// NOTE: ContentMediaType is not set here
 		st.ContentEncoding = "base64"
 	} else {
-		st.Type = typeArray
+		st.Type = TypeArray
 		st.Items = r.refOrReflectTypeToSchema(definitions, t.Elem())
 	}
 }
@@ -513,17 +513,17 @@ func (r *Reflector) reflectStruct(definitions Definitions, t reflect.Type, s *Sc
 	// Handle special types
 	switch t {
 	case timeType: // date-time RFC section 7.3.1
-		s.Type = typeString
+		s.Type = TypeString
 		s.Format = formatDateTime
 		return
 	case uriType: // uri RFC section 7.3.6
-		s.Type = typeString
+		s.Type = TypeString
 		s.Format = formatURI
 		return
 	}
 
 	r.addDefinition(definitions, t, s)
-	s.Type = typeObject
+	s.Type = TypeObject
 	s.Properties = orderedmap.New()
 	s.Description = r.lookupComment(t, "")
 	s.Deprecated = isDeprecatedComment(s.Description)
@@ -595,7 +595,7 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 				OneOf: []*Schema{
 					property,
 					{
-						Type: typeNull,
+						Type: TypeNull,
 					},
 				},
 			}
@@ -694,15 +694,15 @@ func (t *Schema) structKeywordsFromTags(f reflect.StructField, parent *Schema, p
 	t.genericKeywords(tags, parent, propertyName)
 
 	switch t.Type {
-	case typeString:
+	case TypeString:
 		t.stringKeywords(tags)
-	case typeNumber:
+	case TypeNumber:
 		t.numericKeywords(tags)
-	case typeInteger:
+	case TypeInteger:
 		t.numericKeywords(tags)
-	case typeArray:
+	case TypeArray:
 		t.arrayKeywords(tags)
-	case typeBoolean:
+	case TypeBoolean:
 		t.booleanKeywords(tags)
 	}
 
@@ -790,13 +790,13 @@ func (t *Schema) genericKeywords(tags []string, parent *Schema, propertyName str
 				}
 			case kwEnum:
 				switch t.Type {
-				case typeString:
+				case TypeString:
 					t.Enum = append(t.Enum, val)
-				case typeInteger:
+				case TypeInteger:
 					if i, err := strconv.Atoi(val); err == nil {
 						t.Enum = append(t.Enum, i)
 					}
-				case typeNumber:
+				case TypeNumber:
 					if f, err := strconv.ParseFloat(val, 64); err == nil {
 						t.Enum = append(t.Enum, f)
 					}
@@ -952,11 +952,11 @@ func (t *Schema) arrayKeywords(tags []string) {
 				}
 			case kwDefault:
 				switch t.Items.Type {
-				case typeInteger:
+				case TypeInteger:
 					if i, err := strconv.Atoi(val); err == nil {
 						defaultValues = append(defaultValues, i)
 					}
-				case typeNumber:
+				case TypeNumber:
 					if f, err := strconv.ParseFloat(val, 64); err == nil {
 						defaultValues = append(defaultValues, f)
 					}
@@ -966,13 +966,13 @@ func (t *Schema) arrayKeywords(tags []string) {
 
 			case kwEnum:
 				switch t.Items.Type {
-				case typeString:
+				case TypeString:
 					t.Items.Enum = append(t.Items.Enum, val)
-				case typeInteger:
+				case TypeInteger:
 					if i, err := strconv.Atoi(val); err == nil {
 						t.Items.Enum = append(t.Items.Enum, i)
 					}
-				case typeNumber:
+				case TypeNumber:
 					if f, err := strconv.ParseFloat(val, 64); err == nil {
 						t.Items.Enum = append(t.Items.Enum, f)
 					}
